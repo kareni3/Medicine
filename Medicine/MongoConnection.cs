@@ -43,6 +43,7 @@ namespace Medicine
 		Tag,
 		Doctor,
 		Patient,
-		Article
+		Article,
+		Medicament
 	}
 }
