@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class Change
+	public class Change
 	{
 		public DateTime ChangeTime { get; set; }
 		public string Content { get; set; }
