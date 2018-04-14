@@ -20,22 +20,14 @@ namespace Medicine
 				MongoConnection connection = new MongoConnection("ds229008.mlab.com", "29008", user, Console.ReadLine());
 				connection.Connect();
 				Console.Clear();
-				Patient patient = new Patient("Карапузов", "Иван", "Андреевич", connection);
-				patient.Save();
-
-				Console.WriteLine(patient._id);
-				Console.WriteLine(patient.Lastname);
-				Console.WriteLine(patient.Firstname);
-				Console.WriteLine(patient.Middlename);
-
-				patient.GetByName("Карапузов", "Иван", "Андреевич", connection);
-				patient.Middlename = "Михайлович";
-				patient.Save();
-				
-				Console.WriteLine(patient._id);
-				Console.WriteLine(patient.Lastname);
-				Console.WriteLine(patient.Firstname);
-				Console.WriteLine(patient.Middlename);
+				Article article = new Article();
+				article.GetByName("Дивертикулярная болезнь толстой кишки в практике участкового терапевта", connection);
+				Console.WriteLine(article._id);
+				Console.WriteLine(article.Name);
+				Console.WriteLine(article.Link);
+				Console.WriteLine(article.Extract);
+				article.Link = article.Link.Remove(article.Link.Length - 1);
+				article.Save();
 			}
 			catch (Exception ex)
 			{

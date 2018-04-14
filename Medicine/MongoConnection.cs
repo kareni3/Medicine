@@ -42,6 +42,7 @@ namespace Medicine
 	{
 		Tag,
 		Doctor,
-		Patient
+		Patient,
+		Article
 	}
 }

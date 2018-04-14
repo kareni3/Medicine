@@ -20,6 +20,7 @@ namespace Medicine
 
 		public Tag(string content, MongoConnection connection)
 		{
+			Connection = connection;
 			Content = content;
 		}
 
