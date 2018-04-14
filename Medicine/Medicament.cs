@@ -13,7 +13,7 @@ namespace Medicine
 		public ObjectId _id { get; private set; }
 		public string Name { get; set; }
 
-		public MongoConnection Connection;
+		public MongoConnection Connection { get; set; }
 		private IMongoCollection<BsonDocument> collection;
 
 		public Medicament() { }
