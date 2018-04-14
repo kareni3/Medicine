@@ -19,11 +19,13 @@ namespace Medicine
 			try
 			{
 				MongoConnection connection = new MongoConnection("ds229008.mlab.com", "29008", user, password);
-				Console.Clear();
 				connection.Connect();
-				var collection = connection.GetCollection(Collection.Tag);
-				var document = collection.Find(new BsonDocument()).FirstOrDefault();
-				Console.WriteLine(document.ToString());
+				Console.Clear();
+				Tag tag = new Tag("Грипп");
+				tag.Save(connection);
+				Tag myTag = new Tag(tag._id, connection);
+				myTag.Content = "Гипертония";
+				myTag.Save();
 			}
 			catch (Exception ex)
 			{
