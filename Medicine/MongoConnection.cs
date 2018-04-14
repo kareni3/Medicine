@@ -41,6 +41,7 @@ namespace Medicine
 	public enum Collection
 	{
 		Tag,
-		Doctor
+		Doctor,
+		Patient
 	}
 }

@@ -20,22 +20,22 @@ namespace Medicine
 				MongoConnection connection = new MongoConnection("ds229008.mlab.com", "29008", user, Console.ReadLine());
 				connection.Connect();
 				Console.Clear();
-				Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", connection);
-				doctor.Save();
+				Patient patient = new Patient("Карапузов", "Иван", "Андреевич", connection);
+				patient.Save();
 
-				Console.WriteLine(doctor._id);
-				Console.WriteLine(doctor.Lastname);
-				Console.WriteLine(doctor.Firstname);
-				Console.WriteLine(doctor.Middlename);
+				Console.WriteLine(patient._id);
+				Console.WriteLine(patient.Lastname);
+				Console.WriteLine(patient.Firstname);
+				Console.WriteLine(patient.Middlename);
 
-				doctor.GetByName("Иванова", "Людмила", "Ивановна", connection);
-				doctor.Middlename = "Петровна";
-				doctor.Save();
+				patient.GetByName("Карапузов", "Иван", "Андреевич", connection);
+				patient.Middlename = "Михайлович";
+				patient.Save();
 				
-				Console.WriteLine(doctor._id);
-				Console.WriteLine(doctor.Lastname);
-				Console.WriteLine(doctor.Firstname);
-				Console.WriteLine(doctor.Middlename);
+				Console.WriteLine(patient._id);
+				Console.WriteLine(patient.Lastname);
+				Console.WriteLine(patient.Firstname);
+				Console.WriteLine(patient.Middlename);
 			}
 			catch (Exception ex)
 			{
