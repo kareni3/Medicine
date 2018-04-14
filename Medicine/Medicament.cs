@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class Medicament : MedicineObject
+	public class Medicament : MedicineObject
 	{
 		public ObjectId _id { get; private set; }
 		public string Name { get; set; }

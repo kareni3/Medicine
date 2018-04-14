@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class Tag
+	public class Tag
 	{
 		public ObjectId _id { get; private set; }
 		public string Content { get; set; }

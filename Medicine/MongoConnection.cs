@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class MongoConnection
+	public class MongoConnection
 	{
 		MongoClient mongoClient;
 		IMongoDatabase database;

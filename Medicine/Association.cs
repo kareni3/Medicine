@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class Association
+	public class Association
 	{
 		public ObjectId _id { get; private set; }
 		public string Description { get; set; }
