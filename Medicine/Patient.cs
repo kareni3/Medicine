@@ -15,7 +15,7 @@ namespace Medicine
 		public string Firstname { get; set; }
 		public string Middlename { get; set; }
 
-		public MongoConnection Connection;
+		public MongoConnection Connection { get; set; }
 		private IMongoCollection<BsonDocument> collection;
 
 		public Patient() { }

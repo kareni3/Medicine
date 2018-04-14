@@ -44,6 +44,7 @@ namespace Medicine
 		Doctor,
 		Patient,
 		Article,
-		Medicament
+		Medicament,
+		Association
 	}
 }

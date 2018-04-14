@@ -15,7 +15,7 @@ namespace Medicine
 		public string Link { get; set; }
 		public string Extract { get; set; }
 
-		public MongoConnection Connection;
+		public MongoConnection Connection { get; set; }
 		private IMongoCollection<BsonDocument> collection;
 
 		public Article() { }

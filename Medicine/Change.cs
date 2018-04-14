@@ -10,5 +10,11 @@ namespace Medicine
 	{
 		public DateTime ChangeTime { get; set; }
 		public string Content { get; set; }
+
+		public Change()
+		{
+			ChangeTime = DateTime.Now;
+			Content = "Ассоциация создана";
+		}
 	}
 }
