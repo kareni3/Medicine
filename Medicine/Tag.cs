@@ -12,14 +12,18 @@ namespace Medicine
 	{
 		public ObjectId _id { get; private set; }
 		public string Content { get; set; }
-		public MongoConnection Connection;
 
-		public Tag(string content)
+		public MongoConnection Connection;
+		private IMongoCollection<BsonDocument> collection;
+
+		public Tag() { }
+
+		public Tag(string content, MongoConnection connection)
 		{
 			Content = content;
 		}
 
-		public Tag(ObjectId id, MongoConnection connection)
+		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
 			collection = Connection.GetCollection(Collection.Tag);
@@ -29,7 +33,15 @@ namespace Medicine
 			Content = document.GetValue("Content").AsString;
 		}
 
-		private IMongoCollection<BsonDocument> collection;
+		public void GetByContent(string content, MongoConnection connection)
+		{
+			Connection = connection;
+			collection = Connection.GetCollection(Collection.Tag);
+			var filter = Builders<BsonDocument>.Filter.Eq("Content", content);
+			var document = collection.Find(filter).First();
+			_id = document.GetValue("_id").AsObjectId;
+			Content = content;
+		}
 
 		public void Save(MongoConnection connection)
 		{
@@ -54,11 +66,6 @@ namespace Medicine
 		public void Save()
 		{
 			Save(Connection);
-		}
-
-		public override string ToString()
-		{
-			return $"Tag:\n\tContent: {Content}";
 		}
 	}
 }

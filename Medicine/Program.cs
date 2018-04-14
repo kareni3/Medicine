@@ -15,17 +15,27 @@ namespace Medicine
 			Console.Write("Имя пользователя: ");
 			string user = Console.ReadLine();
 			Console.Write("Пароль: ");
-			string password = Console.ReadLine();
 			try
 			{
-				MongoConnection connection = new MongoConnection("ds229008.mlab.com", "29008", user, password);
+				MongoConnection connection = new MongoConnection("ds229008.mlab.com", "29008", user, Console.ReadLine());
 				connection.Connect();
 				Console.Clear();
-				Tag tag = new Tag("Грипп");
-				tag.Save(connection);
-				Tag myTag = new Tag(tag._id, connection);
-				myTag.Content = "Гипертония";
-				myTag.Save();
+				Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", connection);
+				doctor.Save();
+
+				Console.WriteLine(doctor._id);
+				Console.WriteLine(doctor.Lastname);
+				Console.WriteLine(doctor.Firstname);
+				Console.WriteLine(doctor.Middlename);
+
+				doctor.GetByName("Иванова", "Людмила", "Ивановна", connection);
+				doctor.Middlename = "Петровна";
+				doctor.Save();
+				
+				Console.WriteLine(doctor._id);
+				Console.WriteLine(doctor.Lastname);
+				Console.WriteLine(doctor.Firstname);
+				Console.WriteLine(doctor.Middlename);
 			}
 			catch (Exception ex)
 			{

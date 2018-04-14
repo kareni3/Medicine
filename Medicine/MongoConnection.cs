@@ -40,6 +40,7 @@ namespace Medicine
 
 	public enum Collection
 	{
-		Tag
+		Tag,
+		Doctor
 	}
 }
