@@ -12,7 +12,6 @@ namespace Medicine
 	{
 		public string Content { get; set; }
 
-		public MongoConnection Connection { get; set; }
 		private string collectionName = "Tag";
 
 		public Tag() { }
