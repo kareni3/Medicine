@@ -16,8 +16,7 @@ namespace Medicine
 		public Doctor Doctor { get; set; }
 		public List<IMedicineObject> MedicineObjects { get; set; }
 		public List<Change> Changes { get; private set; }
-
-		public MongoConnection Connection { get; set; }
+		
 		private string collectionName = "Association";
 
 		public Association()

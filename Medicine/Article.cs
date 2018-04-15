@@ -15,8 +15,6 @@ namespace Medicine
 		public string Extract { get; set; }
 		private string collectionName = "Article";
 
-		public MongoConnection Connection { get; set; }
-
 		public Article() { }
 
 		public Article(string name, string link, string extract, MongoConnection connection)
