@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public class MongoEntity
+	public abstract class MongoEntity
 	{
 		protected IMongoCollection<BsonDocument> collection { get; set; }
 		public string CollectionName { get; protected set; }
