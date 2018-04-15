@@ -12,11 +12,12 @@ namespace Medicine
 	{
 		public string Content { get; set; }
 
-		private string collectionName = "Tag";
+		public Tag()
+		{
+			collectionName = "Tag";
+		}
 
-		public Tag() { }
-
-		public Tag(string content, MongoConnection connection)
+		public Tag(string content, MongoConnection connection) : this()
 		{
 			Connection = connection;
 			Content = content;

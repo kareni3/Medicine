@@ -13,5 +13,6 @@ namespace Medicine
 		internal IMongoCollection<BsonDocument> Collection { get; set; }
 		public ObjectId _id { get; protected set; }
 		public MongoConnection Connection { get; set; }
+		protected string collectionName;
 	}
 }

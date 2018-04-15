@@ -17,21 +17,18 @@ namespace Medicine
 		public List<IMedicineObject> MedicineObjects { get; set; }
 		public List<Change> Changes { get; private set; }
 		
-		private string collectionName = "Association";
+		
 
 		public Association()
 		{
+			collectionName = "Association";
 			Tags = new List<Tag>();
 			MedicineObjects = new List<IMedicineObject>();
 			Changes = new List<Change>();
 		}
 
-		public Association(Doctor doctor, string description, MongoConnection connection)
+		public Association(Doctor doctor, string description, MongoConnection connection) : this()
 		{
-			Tags = new List<Tag>();
-			MedicineObjects = new List<IMedicineObject>();
-			Changes = new List<Change>();
-
 			Doctor = doctor;
 			Description = description;
 			Connection = connection;
