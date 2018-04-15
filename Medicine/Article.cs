@@ -13,17 +13,14 @@ namespace Medicine
 		public string Name { get; set; }
 		public string Link { get; set; }
 		public string Extract { get; set; }
+		private string collectionName = "Article";
 
 		public MongoConnection Connection { get; set; }
 
-		public Article()
-		{
-			CollectionName = "Article";
-		}
+		public Article() { }
 
 		public Article(string name, string link, string extract, MongoConnection connection)
 		{
-			CollectionName = "Article";
 			Connection = connection;
 			Name = name;
 			Link = link;
@@ -33,9 +30,9 @@ namespace Medicine
 		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = id;
 			Name = document.GetValue("Name").AsString;
 			Link = document.GetValue("Link").AsString;
@@ -45,9 +42,9 @@ namespace Medicine
 		public void GetByName(string name, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Name", name);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
 			Name = name;
 			Link = document.GetValue("Link").AsString;
@@ -57,9 +54,9 @@ namespace Medicine
 		public void GetByLink(string link, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Link", link);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
 			Name = document.GetValue("Name").AsString;
 			Link = link;
@@ -68,7 +65,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(CollectionName);
+			Collection = connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
@@ -77,7 +74,7 @@ namespace Medicine
 					{ "Link", Link },
 					{ "Extract", Extract }
 				};
-				collection.InsertOne(document);
+				Collection.InsertOne(document);
 				_id = document.GetValue("_id").AsObjectId;
 			}
 			else
@@ -88,7 +85,7 @@ namespace Medicine
 					Builders<BsonDocument>.Update.Set("Link", Link),
 					Builders<BsonDocument>.Update.Set("Extract", Extract)
 				);
-				collection.UpdateOne(filter, update);
+				Collection.UpdateOne(filter, update);
 			}
 		}
 
