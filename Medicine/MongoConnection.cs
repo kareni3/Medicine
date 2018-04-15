@@ -16,7 +16,7 @@ namespace Medicine
 		public string Server { get; set; }
 		public string Port { get; set; }
 		public string User { get; set; }
-		public string Password { get; set; }
+		public string Password { private get; set; }
 
 		public MongoConnection(string server, string port, string user, string password)
 		{
@@ -32,7 +32,7 @@ namespace Medicine
 			database = mongoClient.GetDatabase("medicine");
 		}
 
-		public IMongoCollection<BsonDocument> GetCollection(string name)
+		internal IMongoCollection<BsonDocument> GetCollection(string name)
 		{
 			return database.GetCollection<BsonDocument>(name);
 		}

@@ -19,47 +19,9 @@ namespace Medicine
 				connection.Connect();
 				Console.Clear();
 
-				Article article = new Article();
-				article.GetByName("Дивертикулярная болезнь толстой кишки в практике участкового терапевта", connection);
-
-				Doctor doctor = new Doctor();
-				doctor.GetByName("Иванова", "Людмила", "Петровна", connection);
-
-				Patient patient = new Patient();
-				patient.GetByName("Карапузов", "Иван", "Иванович", connection);
-
-				Medicament medicament = new Medicament();
-				medicament.GetByName("Мезим", connection);
-
-				Tag tag1 = new Tag();
-				tag1.GetByContent("Отит", connection);
-
-				Tag tag2 = new Tag();
-				tag2.GetByContent("Карапузов", connection);
-
-				Tag tag3 = new Tag();
-				tag3.GetByContent("Карапузовдержись", connection);
-
-				Tag tag4 = new Tag();
-				tag4.GetByContent("Сложный случай", connection);
-
-				Association association = new Association(doctor, "Карапузов молодец", connection);
-				association.Tags.AddRange(new Tag[]
-				{
-					tag1,
-					tag2,
-					tag3,
-					tag4
-				});
-				association.MedicineObjects.AddRange(new IMedicineObject[]
-				{
-					article,
-					medicament,
-					patient
-				});
-
-				association.Save();
-				Console.WriteLine("Success");
+				Association association = new Association();
+				//Нужно добавить ссылку на сборку, в которой ObjectId хранится, иначе здесь нельзя будет использовать ObjectId
+				association.GetById("5ad286a65f734429d4f80dc7", connection);
 			}
 			catch (Exception ex)
 			{

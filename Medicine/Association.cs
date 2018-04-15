@@ -81,6 +81,75 @@ namespace Medicine
 			}
 		}
 
+		public void GetById(string id, MongoConnection connection)
+		{
+			Connection = connection;
+			GetById(new ObjectId(id));
+		}
+
+		private void GetById(ObjectId id, MongoConnection connection)
+		{
+			Connection = connection;
+			GetById(id);
+		}
+
+		public void GetById(ObjectId id)
+		{
+			if (Connection == null)
+				throw new Exception("Передайте экземпляр MongoConnection");
+			collection = Connection.GetCollection(CollectionName);
+			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
+			var document = collection.Find(filter).First();
+			_id = id;
+
+			Description = document.GetValue("Description").AsString;
+
+			Doctor = new Doctor();
+			Doctor.GetById(document.GetValue("Doctor").AsBsonDocument.GetValue("$id").AsObjectId, Connection);
+
+			foreach (BsonDocument doc in document.GetValue("Tags").AsBsonArray)
+			{
+				Tag tag = new Tag();
+				tag.GetById(doc.GetValue("$id").AsObjectId, Connection);
+				Tags.Add(tag);
+			}
+
+			foreach (BsonDocument doc in document.GetValue("MedicineObjects").AsBsonArray)
+			{
+				switch (doc.GetValue("$ref").AsString)
+				{
+					case "Doctor":
+						Doctor doctor = new Doctor();
+						doctor.GetById(doc.GetValue("$id").AsObjectId, Connection);
+						MedicineObjects.Add(doctor);
+						break;
+					case "Medicament":
+						Medicament medicament = new Medicament();
+						medicament.GetById(doc.GetValue("$id").AsObjectId, Connection);
+						MedicineObjects.Add(medicament);
+						break;
+					case "Patient":
+						Patient patient = new Patient();
+						patient.GetById(doc.GetValue("$id").AsObjectId, Connection);
+						MedicineObjects.Add(patient);
+						break;
+					case "Article":
+						Article article = new Article();
+						article.GetById(doc.GetValue("$id").AsObjectId, Connection);
+						MedicineObjects.Add(article);
+						break;
+				}
+			}
+
+			foreach (BsonDocument doc in document.GetValue("Changes").AsBsonArray)
+			{
+				Change change = new Change();
+				change.ChangeTime = doc.GetValue("ChangeTime").ToUniversalTime();
+				change.Content = doc.GetValue("Content").AsString;
+				Changes.Add(change);
+			}
+		}
+
 		public void Save()
 		{
 			Save(Connection);
