@@ -8,20 +8,22 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public class Article : MedicineObject
+	public class Article : MongoEntity, IMedicineObject
 	{
-		public ObjectId _id { get; private set; }
 		public string Name { get; set; }
 		public string Link { get; set; }
 		public string Extract { get; set; }
 
 		public MongoConnection Connection { get; set; }
-		private IMongoCollection<BsonDocument> collection;
 
-		public Article() { }
+		public Article()
+		{
+			CollectionName = "Article";
+		}
 
 		public Article(string name, string link, string extract, MongoConnection connection)
 		{
+			CollectionName = "Article";
 			Connection = connection;
 			Name = name;
 			Link = link;
@@ -31,7 +33,7 @@ namespace Medicine
 		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Article);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 			var document = collection.Find(filter).First();
 			_id = id;
@@ -43,7 +45,7 @@ namespace Medicine
 		public void GetByName(string name, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Article);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Name", name);
 			var document = collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
@@ -55,7 +57,7 @@ namespace Medicine
 		public void GetByLink(string link, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Article);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Link", link);
 			var document = collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
@@ -66,7 +68,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(Collection.Article);
+			collection = connection.GetCollection(CollectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()

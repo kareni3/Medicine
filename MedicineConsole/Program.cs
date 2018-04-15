@@ -51,7 +51,7 @@ namespace Medicine
 					tag3,
 					tag4
 				});
-				association.MedicineObjects.AddRange(new MedicineObject[]
+				association.MedicineObjects.AddRange(new IMedicineObject[]
 				{
 					article,
 					medicament,
