@@ -14,11 +14,14 @@ namespace Medicine
 		public string Firstname { get; set; }
 		public string Middlename { get; set; }
 		
-		private string collectionName = "Doctor";
+		
 
-		public Doctor() { }
+		public Doctor()
+		{
+			collectionName = "Doctor";
+		}
 
-		public Doctor(string lastname, string firstname, string middlename, MongoConnection connection)
+		public Doctor(string lastname, string firstname, string middlename, MongoConnection connection) : this()
 		{
 			Connection = connection;
 			Lastname = lastname;

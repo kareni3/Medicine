@@ -11,12 +11,13 @@ namespace Medicine
 	public class Medicament : MongoEntity, IMedicineObject
 	{
 		public string Name { get; set; }
+		
+		public Medicament()
+		{
+			collectionName = "Medicament";
+		}
 
-		private string collectionName = "Medicament";
-
-		public Medicament() { }
-
-		public Medicament(string name, MongoConnection connection)
+		public Medicament(string name, MongoConnection connection) : this()
 		{
 			Connection = connection;
 			Name = name;
