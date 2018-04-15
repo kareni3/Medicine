@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public abstract class MedicineObject
+	public interface IMedicineObject
 	{
 	}
 }

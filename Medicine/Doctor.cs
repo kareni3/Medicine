@@ -8,20 +8,22 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public class Doctor : MedicineObject
+	public class Doctor : MongoEntity, IMedicineObject
 	{
-		public ObjectId _id { get; private set; }
 		public string Lastname { get; set; }
 		public string Firstname { get; set; }
 		public string Middlename { get; set; }
 
 		public MongoConnection Connection { get; set; }
-		private IMongoCollection<BsonDocument> collection;
 
-		public Doctor() { }
+		public Doctor()
+		{
+			CollectionName = "Doctor";
+		}
 
 		public Doctor(string lastname, string firstname, string middlename, MongoConnection connection)
 		{
+			CollectionName = "Doctor";
 			Connection = connection;
 			Lastname = lastname;
 			Firstname = firstname;
@@ -31,7 +33,7 @@ namespace Medicine
 		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Doctor);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 			var document = collection.Find(filter).First();
 			_id = id;
@@ -44,7 +46,7 @@ namespace Medicine
 		public void GetByName(string lastname, string firstname, string middlename, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Doctor);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.And(new List<FilterDefinition<BsonDocument>>()
 			{
 				Builders<BsonDocument>.Filter.Eq("Lastname", lastname),
@@ -60,7 +62,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(Collection.Doctor);
+			collection = connection.GetCollection(CollectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()

@@ -9,29 +9,30 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public class Association
+	public class Association : MongoEntity
 	{
-		public ObjectId _id { get; private set; }
 		public string Description { get; set; }
 		public List<Tag> Tags { get; set; }
 		public Doctor Doctor { get; set; }
-		public List<MedicineObject> MedicineObjects { get; set; }
+		public List<IMedicineObject> MedicineObjects { get; set; }
 		public List<Change> Changes { get; private set; }
 
 		public MongoConnection Connection { get; set; }
-		private IMongoCollection<BsonDocument> collection;
 
 		public Association()
 		{
+			CollectionName = "Association";
+			Article article = new Article();
 			Tags = new List<Tag>();
-			MedicineObjects = new List<MedicineObject>();
+			MedicineObjects = new List<IMedicineObject>();
 			Changes = new List<Change>();
 		}
 
 		public Association(Doctor doctor, string description, MongoConnection connection)
 		{
+			CollectionName = "Association";
 			Tags = new List<Tag>();
-			MedicineObjects = new List<MedicineObject>();
+			MedicineObjects = new List<IMedicineObject>();
 			Changes = new List<Change>();
 
 			Doctor = doctor;
@@ -41,7 +42,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(Collection.Association);
+			collection = connection.GetCollection(CollectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
@@ -56,16 +57,9 @@ namespace Medicine
 				{
 					document.GetElement("Tags").Value.AsBsonArray.Add(new MongoDBRef("Tag", tag._id).ToBsonDocument());
 				}
-				foreach(MedicineObject medicineObject in MedicineObjects)
+				foreach(IMedicineObject medicineObject in MedicineObjects)
 				{
-					if(medicineObject is Doctor)
-						document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef("Doctor", (medicineObject as Doctor)._id).ToBsonDocument());
-					if (medicineObject is Article)
-						document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef("Article", (medicineObject as Article)._id).ToBsonDocument());
-					if (medicineObject is Medicament)
-						document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef("Medicament", (medicineObject as Medicament)._id).ToBsonDocument());
-					if (medicineObject is Patient)
-						document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef("Patient", (medicineObject as Patient)._id).ToBsonDocument());
+					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef((medicineObject as MongoEntity).CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument());
 				}
 				Change change = new Change();
 				document.GetElement("Changes").Value.AsBsonArray.Add(new BsonDocument

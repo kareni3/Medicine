@@ -32,19 +32,9 @@ namespace Medicine
 			database = mongoClient.GetDatabase("medicine");
 		}
 
-		public IMongoCollection<BsonDocument> GetCollection(Collection collection)
+		public IMongoCollection<BsonDocument> GetCollection(string name)
 		{
-			return database.GetCollection<BsonDocument>(collection.ToString());
+			return database.GetCollection<BsonDocument>(name);
 		}
-	}
-
-	public enum Collection
-	{
-		Tag,
-		Doctor,
-		Patient,
-		Article,
-		Medicament,
-		Association
 	}
 }

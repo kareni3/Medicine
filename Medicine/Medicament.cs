@@ -8,18 +8,20 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public class Medicament : MedicineObject
+	public class Medicament : MongoEntity, IMedicineObject
 	{
-		public ObjectId _id { get; private set; }
 		public string Name { get; set; }
 
 		public MongoConnection Connection { get; set; }
-		private IMongoCollection<BsonDocument> collection;
 
-		public Medicament() { }
+		public Medicament()
+		{
+			CollectionName = "Medicament";
+		}
 
 		public Medicament(string name, MongoConnection connection)
 		{
+			CollectionName = "Medicament";
 			Connection = connection;
 			Name = name;
 		}
@@ -27,7 +29,7 @@ namespace Medicine
 		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Medicament);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 			var document = collection.Find(filter).First();
 			_id = id;
@@ -37,7 +39,7 @@ namespace Medicine
 		public void GetByName(string name, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Medicament);
+			collection = Connection.GetCollection(CollectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Name", name);
 			var document = collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
@@ -46,7 +48,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(Collection.Medicament);
+			collection = connection.GetCollection(CollectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
