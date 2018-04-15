@@ -18,10 +18,10 @@ namespace Medicine
 		public List<Change> Changes { get; private set; }
 
 		public MongoConnection Connection { get; set; }
+		private string collectionName = "Association";
 
 		public Association()
 		{
-			CollectionName = "Association";
 			Tags = new List<Tag>();
 			MedicineObjects = new List<IMedicineObject>();
 			Changes = new List<Change>();
@@ -29,7 +29,6 @@ namespace Medicine
 
 		public Association(Doctor doctor, string description, MongoConnection connection)
 		{
-			CollectionName = "Association";
 			Tags = new List<Tag>();
 			MedicineObjects = new List<IMedicineObject>();
 			Changes = new List<Change>();
@@ -41,7 +40,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(CollectionName);
+			Collection = connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
@@ -58,7 +57,7 @@ namespace Medicine
 				}
 				foreach(IMedicineObject medicineObject in MedicineObjects)
 				{
-					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef((medicineObject as MongoEntity).CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument());
+					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef((medicineObject as MongoEntity).Collection.CollectionNamespace.CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument());
 				}
 				Change change = new Change();
 				document.GetElement("Changes").Value.AsBsonArray.Add(new BsonDocument
@@ -66,7 +65,7 @@ namespace Medicine
 					{ "ChangeTime", change.ChangeTime },
 					{ "Content", change.Content }
 				});
-				collection.InsertOne(document);
+				Collection.InsertOne(document);
 				_id = document.GetValue("_id").AsObjectId;
 			}
 			else
@@ -97,9 +96,9 @@ namespace Medicine
 		{
 			if (Connection == null)
 				throw new Exception("Передайте экземпляр MongoConnection");
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = id;
 
 			Description = document.GetValue("Description").AsString;

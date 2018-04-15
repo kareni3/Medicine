@@ -13,15 +13,12 @@ namespace Medicine
 		public string Name { get; set; }
 
 		public MongoConnection Connection { get; set; }
+		private string collectionName = "Medicament";
 
-		public Medicament()
-		{
-			CollectionName = "Medicament";
-		}
+		public Medicament() { }
 
 		public Medicament(string name, MongoConnection connection)
 		{
-			CollectionName = "Medicament";
 			Connection = connection;
 			Name = name;
 		}
@@ -29,9 +26,9 @@ namespace Medicine
 		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = id;
 			Name = document.GetValue("Name").AsString;
 		}
@@ -39,30 +36,30 @@ namespace Medicine
 		public void GetByName(string name, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Name", name);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
 			Name = name;
 		}
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(CollectionName);
+			Collection = connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
 				{
 					{ "Name", Name }
 				};
-				collection.InsertOne(document);
+				Collection.InsertOne(document);
 				_id = document.GetValue("_id").AsObjectId;
 			}
 			else
 			{
 				var filter = Builders<BsonDocument>.Filter.Eq("_id", _id);
 				var update = Builders<BsonDocument>.Update.Set("Name", Name);
-				collection.UpdateOne(filter, update);
+				Collection.UpdateOne(filter, update);
 			}
 		}
 

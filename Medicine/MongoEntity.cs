@@ -10,8 +10,7 @@ namespace Medicine
 {
 	public abstract class MongoEntity
 	{
-		protected IMongoCollection<BsonDocument> collection { get; set; }
-		public string CollectionName { get; protected set; }
+		internal IMongoCollection<BsonDocument> Collection { get; set; }
 		public ObjectId _id { get; protected set; }
 	}
 }

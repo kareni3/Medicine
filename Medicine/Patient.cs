@@ -15,15 +15,12 @@ namespace Medicine
 		public string Middlename { get; set; }
 
 		public MongoConnection Connection { get; set; }
+		private string collectionName = "Patient";
 
-		public Patient()
-		{
-			CollectionName = "Patient";
-		}
+		public Patient() { }
 
 		public Patient(string lastname, string firstname, string middlename, MongoConnection connection)
 		{
-			CollectionName = "Patient";
 			Connection = connection;
 			Lastname = lastname;
 			Firstname = firstname;
@@ -33,9 +30,9 @@ namespace Medicine
 		public void GetById(ObjectId id, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = id;
 			Lastname = document.GetValue("Lastname").AsString;
 			Firstname = document.GetValue("Firstname").AsString;
@@ -46,14 +43,14 @@ namespace Medicine
 		public void GetByName(string lastname, string firstname, string middlename, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(CollectionName);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.And(new List<FilterDefinition<BsonDocument>>()
 			{
 				Builders<BsonDocument>.Filter.Eq("Lastname", lastname),
 				Builders<BsonDocument>.Filter.Eq("Firstname", firstname),
 				Builders<BsonDocument>.Filter.Eq("Middlename", middlename)
 			});
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = document.GetValue("_id").AsObjectId;
 			Lastname = lastname;
 			Firstname = firstname;
@@ -62,7 +59,7 @@ namespace Medicine
 
 		public void Save(MongoConnection connection)
 		{
-			collection = connection.GetCollection(CollectionName);
+			Collection = connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
@@ -71,7 +68,7 @@ namespace Medicine
 					{ "Firstname", Firstname },
 					{ "Middlename", Middlename }
 				};
-				collection.InsertOne(document);
+				Collection.InsertOne(document);
 				_id = document.GetValue("_id").AsObjectId;
 			}
 			else
@@ -82,7 +79,7 @@ namespace Medicine
 					Builders<BsonDocument>.Update.Set("Firstname", Firstname),
 					Builders<BsonDocument>.Update.Set("Middlename", Middlename)
 				);
-				collection.UpdateOne(filter, update);
+				Collection.UpdateOne(filter, update);
 			}
 		}
 
