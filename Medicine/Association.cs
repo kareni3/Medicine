@@ -22,7 +22,6 @@ namespace Medicine
 		public Association()
 		{
 			CollectionName = "Association";
-			Article article = new Article();
 			Tags = new List<Tag>();
 			MedicineObjects = new List<IMedicineObject>();
 			Changes = new List<Change>();
