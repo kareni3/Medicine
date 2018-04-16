@@ -18,7 +18,14 @@ namespace Medicine
 		public string User { get; set; }
 		public string Password { private get; set; }
 
-		public MongoConnection(string server, string port, string user, string password)
+		private bool connected;
+
+		public MongoConnection()
+		{
+			connected = false;
+		}
+
+		public MongoConnection(string server, string port, string user, string password) : this()
 		{
 			Server = server;
 			Port = port;
@@ -28,12 +35,23 @@ namespace Medicine
 
 		public void Connect()
 		{
-			mongoClient = new MongoClient(String.Format(ConfigurationManager.ConnectionStrings["medicine"].ConnectionString, User, Password, Server, Port));
-			database = mongoClient.GetDatabase("medicine");
+			try
+			{
+				mongoClient = new MongoClient(String.Format(ConfigurationManager.ConnectionStrings["medicine"].ConnectionString, User, Password, Server, Port));
+				database = mongoClient.GetDatabase("medicine");
+				connected = true;
+			}
+			catch
+			{
+				connected = false;
+				throw;
+			}
 		}
 
 		internal IMongoCollection<BsonDocument> GetCollection(string name)
 		{
+			if (!connected)
+				throw new Exception("Не передан экземпляр MongoConnection");
 			return database.GetCollection<BsonDocument>(name);
 		}
 	}
