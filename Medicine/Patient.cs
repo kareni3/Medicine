@@ -27,9 +27,8 @@ namespace Medicine
 			Middlename = middlename;
 		}
 
-		public void GetById(ObjectId id, MongoConnection connection)
+		public override void GetById(ObjectId id)
 		{
-			Connection = connection;
 			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 			var document = Collection.Find(filter).First();
@@ -57,9 +56,9 @@ namespace Medicine
 			Middlename = middlename;
 		}
 
-		public void Save(MongoConnection connection)
+		public override void Save()
 		{
-			Collection = connection.GetCollection(collectionName);
+			Collection = Connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
@@ -81,11 +80,6 @@ namespace Medicine
 				);
 				Collection.UpdateOne(filter, update);
 			}
-		}
-
-		public void Save()
-		{
-			Save(Connection);
 		}
 	}
 }

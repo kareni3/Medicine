@@ -20,7 +20,6 @@ namespace Medicine
 				Console.Clear();
 
 				Association association = new Association();
-				//Нужно добавить ссылку на сборку MonggoDB.Bson, в которой ObjectId хранится, иначе здесь нельзя будет использовать ObjectId
 				association.GetById("5ad286a65f734429d4f80dc7", connection);
 			}
 			catch (Exception ex)
