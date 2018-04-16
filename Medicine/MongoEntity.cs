@@ -14,5 +14,27 @@ namespace Medicine
 		public ObjectId _id { get; protected set; }
 		public MongoConnection Connection { get; set; }
 		protected string collectionName;
+
+		public void GetById(ObjectId id, MongoConnection connection)
+		{
+			Connection = connection;
+			GetById(id);
+		}
+		public void GetById(string id, MongoConnection connection)
+		{
+			Connection = connection;
+			GetById(id);
+		}
+		public void GetById(string id)
+		{
+			GetById(new ObjectId(id));
+		}
+		public abstract void GetById(ObjectId id);
+		public void Save(MongoConnection connection)
+		{
+			Connection = connection;
+			Save();
+		}
+		public abstract void Save();
 	}
 }

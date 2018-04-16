@@ -34,9 +34,9 @@ namespace Medicine
 			Connection = connection;
 		}
 
-		public void Save(MongoConnection connection)
+		public override void Save()
 		{
-			Collection = connection.GetCollection(collectionName);
+			Collection = Connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
@@ -76,19 +76,7 @@ namespace Medicine
 			}
 		}
 
-		public void GetById(string id, MongoConnection connection)
-		{
-			Connection = connection;
-			GetById(new ObjectId(id));
-		}
-
-		private void GetById(ObjectId id, MongoConnection connection)
-		{
-			Connection = connection;
-			GetById(id);
-		}
-
-		public void GetById(ObjectId id)
+		public override void GetById(ObjectId id)
 		{
 			if (Connection == null)
 				throw new Exception("Передайте экземпляр MongoConnection");
@@ -143,11 +131,6 @@ namespace Medicine
 				change.Content = doc.GetValue("Content").AsString;
 				Changes.Add(change);
 			}
-		}
-
-		public void Save()
-		{
-			Save(Connection);
 		}
 	}
 }
