@@ -25,8 +25,6 @@ namespace Medicine
 
 		public override void GetById(ObjectId id)
 		{
-			if (Connection == null)
-				throw new Exception("Не передан экземпляр MongoConnection");
 			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
 			var document = Collection.Find(filter).First();
@@ -46,8 +44,6 @@ namespace Medicine
 
 		public override void Save()
 		{
-			if (Connection == null)
-				throw new Exception("Не передан экземпляр MongoConnection");
 			Collection = Connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
