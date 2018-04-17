@@ -15,7 +15,7 @@ namespace OpenEHR
 
 		public Prescription()
 		{
-			tableName = "Prescription";
+			TableName = "Prescription";
 			Connection = new SqlConnection();
 		}
 
@@ -49,7 +49,7 @@ namespace OpenEHR
 			SqlCommand command = Connection.GetCommand();
 			if (Id == null)
 			{
-				command.CommandText = "insert_" + tableName;
+				command.CommandText = "insert_" + TableName;
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@diagnosisid", Diagnosis.Id);
 				command.Parameters.AddWithValue("@medicamentid", Medicament.Id);
@@ -60,7 +60,7 @@ namespace OpenEHR
 			}
 			else
 			{
-				command.CommandText = "update_" + tableName;
+				command.CommandText = "update_" + TableName;
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@id", Id);
 				command.Parameters.AddWithValue("@diagnosisid", Diagnosis.Id);

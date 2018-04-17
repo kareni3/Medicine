@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Driver;
+using OpenEHR;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,23 +14,48 @@ namespace Medicine
 	{
 		public string Description { get; set; }
 		public List<Tag> Tags { get; set; }
-		//public Doctor Doctor { get; set; }
-		public List<IMedicineObject> MedicineObjects { get; set; }
+		public Doctor Doctor { get; set; }
+		private List<BsonDocument> medicineObjects;
 		public List<Change> Changes { get; private set; }
-		
-		
 
-		public Association()
+		SqlConnection sqlConnection;
+		
+		public Association(SqlConnection connection)
 		{
+			sqlConnection = connection;
 			collectionName = "Association";
 			Tags = new List<Tag>();
-			MedicineObjects = new List<IMedicineObject>();
+			medicineObjects = new List<BsonDocument>();
 			Changes = new List<Change>();
+			Doctor = sqlConnection.CurrentDoctor;
 		}
 
-		public Association(/*Doctor doctor, */string description, MongoConnection connection) : this()
+		public void AddMedicineObject(object medicineObject)
 		{
-			//Doctor = doctor;
+			if (medicineObject is IMedicineObject)
+			{
+				var document = new BsonDocument
+				{
+					{"db", "medicine" },
+					{ "ref", new MongoDBRef((medicineObject as MongoEntity).Collection.CollectionNamespace.CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument() }
+				};
+			}
+			if (medicineObject is IEhrObject)
+			{
+				var document = new BsonDocument
+				{
+					{"db", "openehr" },
+					{ "ref", new BsonDocument
+					{
+						{"table", (medicineObject as SqlEntity).TableName },
+						{ "id", (medicineObject as SqlEntity).Id }
+					} }
+				};
+			}
+		}
+
+		public Association(string description, MongoConnection connection, SqlConnection sqlConnection) : this(sqlConnection)
+		{
 			Description = description;
 			Connection = connection;
 		}
@@ -42,7 +68,7 @@ namespace Medicine
 				var document = new BsonDocument()
 				{
 					{ "Description", Description },
-					//{ "Doctor", new MongoDBRef("Doctor", Doctor._id).ToBsonDocument() },
+					{ "Doctor", Doctor.Id },
 					{ "Tags", new BsonArray() },
 					{ "MedicineObjects", new BsonArray() },
 					{ "Changes", new BsonArray() }
@@ -51,7 +77,7 @@ namespace Medicine
 				{
 					document.GetElement("Tags").Value.AsBsonArray.Add(new MongoDBRef("Tag", tag._id).ToBsonDocument());
 				}
-				foreach(IMedicineObject medicineObject in MedicineObjects)
+				foreach(IMedicineObject medicineObject in medicineObjects)
 				{
 					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef((medicineObject as MongoEntity).Collection.CollectionNamespace.CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument());
 				}
@@ -67,12 +93,7 @@ namespace Medicine
 			else
 			{
 				var filter = Builders<BsonDocument>.Filter.Eq("_id", _id);
-				/*var update = Builders<BsonDocument>.Update.Combine(
-					Builders<BsonDocument>.Update.Set("Name", Name),
-					Builders<BsonDocument>.Update.Set("Link", Link),
-					Builders<BsonDocument>.Update.Set("Extract", Extract)
-				);
-				collection.UpdateOne(filter, update);*/
+				//
 			}
 		}
 
@@ -85,8 +106,8 @@ namespace Medicine
 
 			Description = document.GetValue("Description").AsString;
 
-			//Doctor = new Doctor();
-			//Doctor.GetById(document.GetValue("Doctor").AsBsonDocument.GetValue("$id").AsObjectId, Connection);
+			Doctor = new Doctor();
+			Doctor.GetById(document.GetValue("Doctor").AsInt32, sqlConnection);
 
 			foreach (BsonDocument doc in document.GetValue("Tags").AsBsonArray)
 			{
@@ -117,7 +138,7 @@ namespace Medicine
 					case "Article":
 						Article article = new Article();
 						article.GetById(doc.GetValue("$id").AsObjectId, Connection);
-						MedicineObjects.Add(article);
+						AddMedicineObject(article);
 						break;
 				}
 			}

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OpenEHR
 {
-	public class Patient : SqlEntity
+	public class Patient : SqlEntity, IEhrObject
 	{
 		public string Lastname { get; set; }
 		public string Firstname { get; set; }
@@ -17,7 +17,7 @@ namespace OpenEHR
 
 		public Patient()
 		{
-			tableName = "Patient";
+			TableName = "Patient";
 			Connection = new SqlConnection();
 		}
 
@@ -70,7 +70,7 @@ namespace OpenEHR
 			SqlCommand command = Connection.GetCommand();
 			if (Id == null)
 			{
-				command.CommandText = "insert_" + tableName;
+				command.CommandText = "insert_" + TableName;
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@lastname", Lastname);
 				command.Parameters.AddWithValue("@firstname", Firstname);
@@ -82,7 +82,7 @@ namespace OpenEHR
 			}
 			else
 			{
-				command.CommandText = "update_" + tableName;
+				command.CommandText = "update_" + TableName;
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@id", Id);
 				command.Parameters.AddWithValue("@lastname", Lastname);
