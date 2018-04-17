@@ -106,28 +106,54 @@ namespace MedicineConsole
 				Tag tag3 = new Tag("Гипертония", mongoConnection);
 				Tag tag4 = new Tag("Карапузовдержись", mongoConnection);
 
-				Association association1 = new Association("Ассоциация с наибольшим количеством тегов", mongoConnection);
+				Association association1 = new Association("Ассоциация с наибольшим количеством тегов", mongoConnection, sqlConnection);
 				association1.Tags.AddRange(new Tag[]
 				{
 					tag1,
 					tag2,
 					tag3
 				});
-				association1.MedicineObjects.Add()
+				association1.AddMedicineObjectsRange(new object[]
+				{
+					patient,
+					problem,
+					article1,
+					article2,
+					medicament2,
+					medicament3
+				});
+				association1.Save();
 
-				Association association2 = new Association("Ассоциация про Карапузова", mongoConnection);
+				Association association2 = new Association("Ассоциация про Карапузова", mongoConnection, sqlConnection);
 				association2.Tags.AddRange(new Tag[]
 				{
 					tag1,
 					tag3
 				});
+				association2.AddMedicineObjectsRange(new object[]
+				{
+					patient,
+					article2,
+					article3,
+					medicament
+				});
+				association2.Save();
 
-				Association association3 = new Association("Ассоциация с наименьшим количеством тегов", mongoConnection);
+				Association association3 = new Association("Ассоциация с наименьшим количеством тегов", mongoConnection, sqlConnection);
 				association3.Tags.AddRange(new Tag[]
 				{
 					tag1,
 					tag4
 				});
+				association2.AddMedicineObjectsRange(new object[]
+				{
+					article1,
+					article2,
+					article3,
+					medicament,
+					medicament3
+				});
+				association3.Save();
 			}
 			catch (Exception ex)
 			{
