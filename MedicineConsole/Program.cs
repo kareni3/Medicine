@@ -17,29 +17,15 @@ namespace MedicineConsole
 				connection.Connect();
 				Console.Clear();
 				
-				Patient patient = new Patient("Иванова", "Людмила", "Ивановна");
-				patient.Save(connection);
+				Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", connection);
+				doctor.Save(connection);
 
-				Patient patient2 = new Patient();
-				patient2.GetById(patient.Id, connection);
-				patient2.Lastname = "Петрова";
-				patient2.Save();
+				Doctor doctorUser = new Doctor("Синкевич", "Елисей", "Вячеславович", connection);
+				doctorUser.SignUp("selisej", "123456", "123456");
 
-				Patient patient3 = new Patient();
-				patient3.GetByName("Петрова", "Людмила", "Ивановна", connection);
-				Console.WriteLine(patient3);
-
-				Medicament medicament = new Medicament("Терафлю");
-				medicament.Save(connection);
-
-				Medicament medicament2 = new Medicament();
-				medicament2.GetById(medicament.Id, connection);
-				medicament2.Name = "Нурофен";
-				medicament2.Save();
-				
-				Medicament medicament3 = new Medicament();
-				medicament3.GetByName("Нурофен", connection);
-				Console.WriteLine(medicament3);
+				Doctor selisej = new Doctor();
+				if (selisej.SignIn("selisej", "123456", connection))
+					Console.WriteLine("Вход выполнен успешно");
 			}
 			catch (Exception ex)
 			{

@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Complaint.cs" />
     <Compile Include="Doctor.cs" />
     <Compile Include="Medicament.cs" />
     <Compile Include="Patient.cs" />
