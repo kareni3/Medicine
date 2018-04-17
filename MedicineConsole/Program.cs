@@ -26,6 +26,15 @@ namespace MedicineConsole
 				Problem problem = new Problem("Не могу больше держаться", new DateTime(2018, 4, 17), patient, doctor, connection);
 				problem.Save();
 				Console.WriteLine(problem);
+
+				Complaint complaint1 = new Complaint("Мне больно", problem, connection);
+				complaint1.Save();
+
+				Complaint complaint2 = new Complaint("Очень", problem, connection);
+				complaint2.Save();
+
+				Console.WriteLine(complaint1);
+				Console.WriteLine(complaint2);
 			}
 			catch (Exception ex)
 			{
