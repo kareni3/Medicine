@@ -36,6 +36,23 @@ namespace MedicineConsole
 				Diagnosis diagnosis = new Diagnosis("Простуда", problem, doctor, connection);
 				diagnosis.Save();
 				Console.WriteLine(diagnosis);
+
+				Archetype pulse = new Archetype("Пульс");
+				pulse.Save(connection);
+
+				Archetype pressure = new Archetype("Давление");
+				pressure.Save(connection);
+
+				Console.WriteLine(pressure);
+
+				Symptom symptom1 = new Symptom(diagnosis, pulse, "60", connection);
+				symptom1.Save();
+
+				Symptom symptom2 = new Symptom(diagnosis, pressure, "120/80", connection);
+				symptom2.Save();
+
+				Console.WriteLine(symptom1);
+				Console.WriteLine(symptom2);
 			}
 			catch (Exception ex)
 			{
