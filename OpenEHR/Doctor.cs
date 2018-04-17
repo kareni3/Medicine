@@ -137,5 +137,10 @@ namespace OpenEHR
 				command.ExecuteNonQuery();
 			}
 		}
+
+		public override string ToString()
+		{
+			return $"Врач: {{\n\tФамилия: {Lastname},\n\tИмя: {Firstname},\n\tОтчество: {Middlename}\n}}";
+		}
 	}
 }
