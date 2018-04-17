@@ -53,6 +53,26 @@ namespace MedicineConsole
 
 				Console.WriteLine(symptom1);
 				Console.WriteLine(symptom2);
+
+				Medicament medicament = new Medicament("Мезим");
+				medicament.Save(connection);
+
+				Medicament medicament2 = new Medicament("Терафлю");
+				medicament2.Save(connection);
+
+				Medicament medicament3 = new Medicament("Нурофен");
+				medicament3.Save(connection);
+
+				Prescription prescription = new Prescription(medicament, diagnosis, connection);
+				prescription.Save();
+
+				Prescription prescription2 = new Prescription(medicament2, diagnosis, connection);
+				prescription2.Save();
+
+				Prescription prescription3 = new Prescription(medicament3, diagnosis, connection);
+				prescription3.Save();
+
+				Console.WriteLine(prescription3);
 			}
 			catch (Exception ex)
 			{
