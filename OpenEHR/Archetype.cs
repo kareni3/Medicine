@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenEHR
 {
-	class Archetype : SqlEntity
+	public class Archetype : SqlEntity
 	{
 		public string Name { get; set; }
 
