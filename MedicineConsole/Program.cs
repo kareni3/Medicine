@@ -20,12 +20,12 @@ namespace MedicineConsole
 				Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", connection);
 				doctor.Save(connection);
 
-				Doctor doctorUser = new Doctor("Синкевич", "Елисей", "Вячеславович", connection);
-				doctorUser.SignUp("selisej", "123456", "123456");
+				Patient patient = new Patient("Карапузов", "Иван", "Андреевич");
+				patient.Save(connection);
 
-				Doctor selisej = new Doctor();
-				if (selisej.SignIn("selisej", "123456", connection))
-					Console.WriteLine("Вход выполнен успешно");
+				Problem problem = new Problem("Не могу больше держаться", new DateTime(2018, 4, 17), patient, doctor, connection);
+				problem.Save();
+				Console.WriteLine(problem);
 			}
 			catch (Exception ex)
 			{
