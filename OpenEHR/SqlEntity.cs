@@ -10,7 +10,7 @@ namespace OpenEHR
 	{
 		public int? Id { get; protected set; }
 		public SqlConnection Connection { get; set; }
-		protected string tableName;
+		public string TableName;
 
 		public void GetById(int? id, SqlConnection connection)
 		{

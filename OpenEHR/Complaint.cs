@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace OpenEHR
 {
-	public class Complaint : SqlEntity
+	public class Complaint : SqlEntity, IEhrObject
 	{
 		public Problem Problem { get; set; }
 		public string Content { get; set; }
 
 		public Complaint()
 		{
-			tableName = "Complaint";
+			TableName = "Complaint";
 			Connection = new SqlConnection();
 		}
 
@@ -48,7 +48,7 @@ namespace OpenEHR
 			SqlCommand command = Connection.GetCommand();
 			if (Id == null)
 			{
-				command.CommandText = "insert_" + tableName;
+				command.CommandText = "insert_" + TableName;
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@problemid", Problem.Id);
 				command.Parameters.AddWithValue("@content", Content);
@@ -59,7 +59,7 @@ namespace OpenEHR
 			}
 			else
 			{
-				command.CommandText = "update_" + tableName;
+				command.CommandText = "update_" + TableName;
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@id", Id);
 				command.Parameters.AddWithValue("@problemid", Problem.Id);
