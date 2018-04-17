@@ -40,7 +40,7 @@ namespace Medicine
 					{ "ref", new MongoDBRef((medicineObject as MongoEntity).Collection.CollectionNamespace.CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument() }
 				};
 			}
-			if (medicineObject is IEhrObject)
+			else if (medicineObject is IEhrObject)
 			{
 				var document = new BsonDocument
 				{
@@ -51,6 +51,16 @@ namespace Medicine
 						{ "id", (medicineObject as SqlEntity).Id }
 					} }
 				};
+			}
+			else
+				throw new Exception("Переданный объект нельзя добавить в ассоциацию.");
+		}
+
+		public void AddMedicineObjectsRange(IEnumerable<object> medicineObjects)
+		{
+			foreach(object medicineObject in medicineObjects)
+			{
+				AddMedicineObject(medicineObject);
 			}
 		}
 
@@ -77,9 +87,9 @@ namespace Medicine
 				{
 					document.GetElement("Tags").Value.AsBsonArray.Add(new MongoDBRef("Tag", tag._id).ToBsonDocument());
 				}
-				foreach(IMedicineObject medicineObject in medicineObjects)
+				foreach(BsonDocument medicineObject in medicineObjects)
 				{
-					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new MongoDBRef((medicineObject as MongoEntity).Collection.CollectionNamespace.CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument());
+					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(medicineObject);
 				}
 				Change change = new Change();
 				document.GetElement("Changes").Value.AsBsonArray.Add(new BsonDocument
@@ -145,9 +155,11 @@ namespace Medicine
 
 			foreach (BsonDocument doc in document.GetValue("Changes").AsBsonArray)
 			{
-				Change change = new Change();
-				change.ChangeTime = doc.GetValue("ChangeTime").ToUniversalTime();
-				change.Content = doc.GetValue("Content").AsString;
+				Change change = new Change()
+				{
+					ChangeTime = doc.GetValue("ChangeTime").ToUniversalTime(),
+					Content = doc.GetValue("Content").AsString
+				};
 				Changes.Add(change);
 			}
 		}
