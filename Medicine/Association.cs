@@ -13,7 +13,7 @@ namespace Medicine
 	{
 		public string Description { get; set; }
 		public List<Tag> Tags { get; set; }
-		public Doctor Doctor { get; set; }
+		//public Doctor Doctor { get; set; }
 		public List<IMedicineObject> MedicineObjects { get; set; }
 		public List<Change> Changes { get; private set; }
 		
@@ -27,9 +27,9 @@ namespace Medicine
 			Changes = new List<Change>();
 		}
 
-		public Association(Doctor doctor, string description, MongoConnection connection) : this()
+		public Association(/*Doctor doctor, */string description, MongoConnection connection) : this()
 		{
-			Doctor = doctor;
+			//Doctor = doctor;
 			Description = description;
 			Connection = connection;
 		}
@@ -42,7 +42,7 @@ namespace Medicine
 				var document = new BsonDocument()
 				{
 					{ "Description", Description },
-					{ "Doctor", new MongoDBRef("Doctor", Doctor._id).ToBsonDocument() },
+					//{ "Doctor", new MongoDBRef("Doctor", Doctor._id).ToBsonDocument() },
 					{ "Tags", new BsonArray() },
 					{ "MedicineObjects", new BsonArray() },
 					{ "Changes", new BsonArray() }
@@ -85,8 +85,8 @@ namespace Medicine
 
 			Description = document.GetValue("Description").AsString;
 
-			Doctor = new Doctor();
-			Doctor.GetById(document.GetValue("Doctor").AsBsonDocument.GetValue("$id").AsObjectId, Connection);
+			//Doctor = new Doctor();
+			//Doctor.GetById(document.GetValue("Doctor").AsBsonDocument.GetValue("$id").AsObjectId, Connection);
 
 			foreach (BsonDocument doc in document.GetValue("Tags").AsBsonArray)
 			{
@@ -99,7 +99,7 @@ namespace Medicine
 			{
 				switch (doc.GetValue("$ref").AsString)
 				{
-					case "Doctor":
+					/*case "Doctor":
 						Doctor doctor = new Doctor();
 						doctor.GetById(doc.GetValue("$id").AsObjectId, Connection);
 						MedicineObjects.Add(doctor);
@@ -113,7 +113,7 @@ namespace Medicine
 						Patient patient = new Patient();
 						patient.GetById(doc.GetValue("$id").AsObjectId, Connection);
 						MedicineObjects.Add(patient);
-						break;
+						break;*/
 					case "Article":
 						Article article = new Article();
 						article.GetById(doc.GetValue("$id").AsObjectId, Connection);

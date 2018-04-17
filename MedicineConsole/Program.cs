@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Medicine;
+using OpenEHR;
+using System;
 
-namespace Medicine
+namespace MedicineConsole
 {
 	class Program
 	{
@@ -15,12 +13,33 @@ namespace Medicine
 			Console.Write("Пароль: ");
 			try
 			{
-				MongoConnection connection = new MongoConnection("ds229008.mlab.com", "29008", user, Console.ReadLine());
+				SqlConnection connection = new SqlConnection("tcp:medic.database.windows.net", "1433", user, Console.ReadLine());
 				connection.Connect();
 				Console.Clear();
+				
+				Patient patient = new Patient("Иванова", "Людмила", "Ивановна");
+				patient.Save(connection);
 
-				Association association = new Association();
-				association.GetById("5ad286a65f734429d4f80dc7", connection);
+				Patient patient2 = new Patient();
+				patient2.GetById(patient.Id, connection);
+				patient2.Lastname = "Петрова";
+				patient2.Save();
+
+				Patient patient3 = new Patient();
+				patient3.GetByName("Петрова", "Людмила", "Ивановна", connection);
+				Console.WriteLine(patient3);
+
+				Medicament medicament = new Medicament("Терафлю");
+				medicament.Save(connection);
+
+				Medicament medicament2 = new Medicament();
+				medicament2.GetById(medicament.Id, connection);
+				medicament2.Name = "Нурофен";
+				medicament2.Save();
+				
+				Medicament medicament3 = new Medicament();
+				medicament3.GetByName("Нурофен", connection);
+				Console.WriteLine(medicament3);
 			}
 			catch (Exception ex)
 			{

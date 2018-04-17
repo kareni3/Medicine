@@ -73,6 +73,10 @@
       <Project>{7db884de-9acd-40bf-a5d2-14973dbc7db2}</Project>
       <Name>Medicine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OpenEHR\OpenEHR.csproj">
+      <Project>{156b3bb0-c75e-4550-bf49-69e943d19d71}</Project>
+      <Name>OpenEHR</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

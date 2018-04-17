@@ -48,11 +48,11 @@ namespace Medicine
 			}
 		}
 
-		internal IMongoCollection<BsonDocument> GetCollection(string name)
+		internal IMongoCollection<BsonDocument> GetCollection(string collectionName)
 		{
 			if (!connected)
 				throw new Exception("Не передан экземпляр MongoConnection");
-			return database.GetCollection<BsonDocument>(name);
+			return database.GetCollection<BsonDocument>(collectionName);
 		}
 	}
 }
