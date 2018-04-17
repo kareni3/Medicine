@@ -14,6 +14,7 @@ namespace OpenEHR
 		public string Port { get; set; }
 		public string User { get; set; }
 		public string Password { private get; set; }
+		public Doctor CurrentDoctor { get; internal set; }
 
 		private bool connected;
 
