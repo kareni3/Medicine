@@ -33,8 +33,9 @@ namespace MedicineConsole
 				Complaint complaint2 = new Complaint("Очень", problem, connection);
 				complaint2.Save();
 
-				Console.WriteLine(complaint1);
-				Console.WriteLine(complaint2);
+				Diagnosis diagnosis = new Diagnosis("Простуда", problem, doctor, connection);
+				diagnosis.Save();
+				Console.WriteLine(diagnosis);
 			}
 			catch (Exception ex)
 			{

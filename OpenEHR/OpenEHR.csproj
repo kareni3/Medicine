@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Archetype.cs" />
     <Compile Include="Complaint.cs" />
+    <Compile Include="Diagnosis.cs" />
     <Compile Include="Doctor.cs" />
     <Compile Include="Medicament.cs" />
     <Compile Include="Patient.cs" />
