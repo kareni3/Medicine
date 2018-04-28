@@ -32,16 +32,19 @@ namespace OpenEHR
 			command.CommandText = "SELECT * FROM Complaint WHERE ComplaintID = @id";
 			command.Parameters.AddWithValue("@id", id);
 			SqlDataReader reader = command.ExecuteReader();
+            int problemId = 0;
 			if (reader.HasRows)
 			{
 				reader.Read();
 				Id = id;
-				Problem = new Problem();
-				Problem.GetById(reader.GetInt32(1));
-				Content = reader.GetString(2);
+                problemId = reader.GetInt32(1);
+                Content = reader.GetString(2);
 			}
 			reader.Close();
-		}
+
+            Problem = new Problem();
+            Problem.GetById(problemId, Connection);
+        }
 
 		public override void Save()
 		{

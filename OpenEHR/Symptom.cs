@@ -34,18 +34,23 @@ namespace OpenEHR
 			command.CommandText = "SELECT * FROM Symptom WHERE SymptomID = @id";
 			command.Parameters.AddWithValue("@id", id);
 			SqlDataReader reader = command.ExecuteReader();
+            int diagnosisId = 0;
+            int archetypeId = 0;
 			if (reader.HasRows)
 			{
 				reader.Read();
 				Id = id;
-				Diagnosis = new Diagnosis();
-				Diagnosis.GetById(reader.GetInt32(1));
-				Archetype = new Archetype();
-				Archetype.GetById(reader.GetInt32(2));
-				ArchetypeValue = reader.GetString(3);
+                diagnosisId = reader.GetInt32(1);
+                archetypeId = reader.GetInt32(2);
+                ArchetypeValue = reader.GetString(3);
 			}
 			reader.Close();
-		}
+
+            Diagnosis = new Diagnosis();
+            Diagnosis.GetById(diagnosisId, Connection);
+            Archetype = new Archetype();
+            Archetype.GetById(archetypeId, Connection);
+        }
 
 		public override void Save()
 		{

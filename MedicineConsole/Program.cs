@@ -27,6 +27,8 @@ namespace MedicineConsole
 
 				Console.Clear();
 
+                #region Заполнение БД
+
                 Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", sqlConnection);
                 doctor.Save(sqlConnection);
 
@@ -162,8 +164,50 @@ namespace MedicineConsole
 					medicament3
 				});
 				association3.Save();
-			}
-			catch (Exception ex)
+
+                #endregion
+
+                #region Поучение данных из БД
+
+                Doctor doctor2 = new Doctor();
+                doctor2.GetById(doctor.Id, sqlConnection);
+
+                Patient patient2 = new Patient();
+                patient2.GetById(patient.Id, sqlConnection);
+
+                Problem problem2 = new Problem();
+                problem2.GetById(problem.Id, sqlConnection);
+
+                Complaint complaint3 = new Complaint();
+                complaint3.GetById(complaint1.Id, sqlConnection);
+
+                Diagnosis diagnosis2 = new Diagnosis();
+                diagnosis2.GetById(diagnosis.Id, sqlConnection);
+
+                Medicament medicament4 = new Medicament();
+                medicament4.GetById(medicament.Id, sqlConnection);
+
+                Symptom symptom3 = new Symptom();
+                symptom3.GetById(symptom1.Id, sqlConnection);
+
+                Archetype archetype = new Archetype();
+                archetype.GetById(symptom1.Id, sqlConnection);
+
+                Prescription prescription4 = new Prescription();
+                prescription4.GetById(prescription.Id, sqlConnection);
+
+                Article article4 = new Article();
+                article4.GetById(article1._id, mongoConnection);
+
+                Tag tag5 = new Tag();
+                tag5.GetById(tag1._id, mongoConnection);
+
+                Association association4 = new Association(sqlConnection);
+                association4.GetById(association1._id, mongoConnection);
+
+                #endregion
+            }
+            catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 			}

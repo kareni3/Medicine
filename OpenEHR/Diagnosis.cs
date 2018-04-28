@@ -34,17 +34,22 @@ namespace OpenEHR
 			command.CommandText = "SELECT * FROM Diagnosis WHERE DiagnosisID = @id";
 			command.Parameters.AddWithValue("@id", id);
 			SqlDataReader reader = command.ExecuteReader();
+            int problemId = 0;
+            int doctorId = 0;
 			if (reader.HasRows)
 			{
 				reader.Read();
 				Id = id;
-				Problem = new Problem();
-				Problem.GetById(reader.GetInt32(1));
-				Doctor = new Doctor();
-				Doctor.GetById(reader.GetInt32(2));
-				Content = reader.GetString(3);
-			}
-			reader.Close();
+                problemId = reader.GetInt32(1);
+                doctorId = reader.GetInt32(2);
+                Content = reader.GetString(3);
+            }
+            reader.Close();
+
+            Problem = new Problem();
+            Problem.GetById(problemId, Connection);
+            Doctor = new Doctor();
+            Doctor.GetById(doctorId, Connection);
 		}
 
 		public override void Save()
