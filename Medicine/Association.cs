@@ -15,7 +15,8 @@ namespace Medicine
 		public string Description { get; set; }
 		public List<Tag> Tags { get; set; }
 		public Doctor Doctor { get; set; }
-		private List<BsonDocument> medicineObjects;
+        public Article Article { get; set; }
+		public List<IEhrObject> MedicineObjects { get; set; }
 		public List<Change> Changes { get; private set; }
 
 		SqlConnection sqlConnection;
@@ -25,43 +26,9 @@ namespace Medicine
 			sqlConnection = connection;
 			collectionName = "Association";
 			Tags = new List<Tag>();
-			medicineObjects = new List<BsonDocument>();
+			MedicineObjects = new List<IEhrObject>();
 			Changes = new List<Change>();
 			Doctor = sqlConnection.CurrentDoctor;
-		}
-
-		public void AddMedicineObject(object medicineObject)
-		{
-			if (medicineObject is IMedicineObject)
-			{
-				var document = new BsonDocument
-				{
-					{"db", "medicine" },
-					{ "ref", new MongoDBRef((medicineObject as MongoEntity).Collection.CollectionNamespace.CollectionName, (medicineObject as MongoEntity)._id).ToBsonDocument() }
-				};
-			}
-			else if (medicineObject is IEhrObject)
-			{
-				var document = new BsonDocument
-				{
-					{"db", "openehr" },
-					{ "ref", new BsonDocument
-					{
-						{"table", (medicineObject as SqlEntity).TableName },
-						{ "id", (medicineObject as SqlEntity).Id }
-					} }
-				};
-			}
-			else
-				throw new Exception("Переданный объект нельзя добавить в ассоциацию.");
-		}
-
-		public void AddMedicineObjectsRange(IEnumerable<object> medicineObjects)
-		{
-			foreach(object medicineObject in medicineObjects)
-			{
-				AddMedicineObject(medicineObject);
-			}
 		}
 
 		public Association(string description, MongoConnection connection, SqlConnection sqlConnection) : this(sqlConnection)
@@ -87,9 +54,13 @@ namespace Medicine
 				{
 					document.GetElement("Tags").Value.AsBsonArray.Add(new MongoDBRef("Tag", tag._id).ToBsonDocument());
 				}
-				foreach(BsonDocument medicineObject in medicineObjects)
+				foreach(IEhrObject medicineObject in MedicineObjects)
 				{
-					document.GetElement("MedicineObjects").Value.AsBsonArray.Add(medicineObject);
+                    document.GetElement("MedicineObjects").Value.AsBsonArray.Add(new BsonDocument
+                    {
+                        { "Table", (medicineObject as SqlEntity).TableName },
+                        { "Id", (medicineObject as SqlEntity).Id }
+                    });
 				}
 				Change change = new Change();
 				document.GetElement("Changes").Value.AsBsonArray.Add(new BsonDocument
@@ -128,28 +99,43 @@ namespace Medicine
 
 			foreach (BsonDocument doc in document.GetValue("MedicineObjects").AsBsonArray)
 			{
-				switch (doc.GetValue("$ref").AsString)
+				switch (doc.GetValue("Table").AsString)
 				{
-					/*case "Doctor":
+                    case "Complaint":
+                        Complaint complaint = new Complaint();
+                        complaint.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
+                        MedicineObjects.Add(complaint);
+                        break;
+                    case "Diagnosis":
+                        Diagnosis diagnosis = new Diagnosis();
+                        diagnosis.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
+                        MedicineObjects.Add(diagnosis);
+                        break;
+                    case "Doctor":
 						Doctor doctor = new Doctor();
-						doctor.GetById(doc.GetValue("$id").AsObjectId, Connection);
+						doctor.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
 						MedicineObjects.Add(doctor);
 						break;
 					case "Medicament":
 						Medicament medicament = new Medicament();
-						medicament.GetById(doc.GetValue("$id").AsObjectId, Connection);
+						medicament.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
 						MedicineObjects.Add(medicament);
 						break;
 					case "Patient":
 						Patient patient = new Patient();
-						patient.GetById(doc.GetValue("$id").AsObjectId, Connection);
-						MedicineObjects.Add(patient);
-						break;*/
-					case "Article":
-						Article article = new Article();
-						article.GetById(doc.GetValue("$id").AsObjectId, Connection);
-						AddMedicineObject(article);
+						patient.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
+                        MedicineObjects.Add(patient);
 						break;
+                    case "Problem":
+                        Problem problem = new Problem();
+                        problem.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
+                        MedicineObjects.Add(problem);
+                        break;
+                    case "Symptom":
+                        Symptom symptom = new Symptom();
+                        symptom.GetById(doc.GetValue("Id").AsInt32, sqlConnection);
+                        MedicineObjects.Add(symptom);
+                        break;
 				}
 			}
 
