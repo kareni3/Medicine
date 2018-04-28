@@ -7,11 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medicine", "Medicine\Medici
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MedicineConsole", "MedicineConsole\MedicineConsole.csproj", "{D42AB58F-57D6-462C-84E8-F618E32EDCD9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6854E12E-AB16-4A2B-80A8-52D3A007CF05}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenEHR", "OpenEHR\OpenEHR.csproj", "{156B3BB0-C75E-4550-BF49-69E943D19D71}"
 EndProject
 Global
