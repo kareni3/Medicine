@@ -68,7 +68,6 @@
     <Compile Include="Article.cs" />
     <Compile Include="Association.cs" />
     <Compile Include="Change.cs" />
-    <Compile Include="IMedicineObject.cs" />
     <Compile Include="MongoConnection.cs" />
     <Compile Include="MongoEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

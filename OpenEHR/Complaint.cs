@@ -73,7 +73,7 @@ namespace OpenEHR
 
 		public override string ToString()
 		{
-			return $"Жалоба: {{\n\t{Problem.ToString()},\n\tСодержание: {Content}\n}}";
+			return $"Жалоба: {{ {Problem.ToString()}, Содержание: \"{Content}\" }}";
 		}
 	}
 }

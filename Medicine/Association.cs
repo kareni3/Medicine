@@ -46,6 +46,7 @@ namespace Medicine
 				{
 					{ "Description", Description },
 					{ "Doctor", Doctor.Id },
+                    { "Article", new MongoDBRef("Article", Article._id).ToBsonDocument() },
 					{ "Tags", new BsonArray() },
 					{ "MedicineObjects", new BsonArray() },
 					{ "Changes", new BsonArray() }
@@ -89,8 +90,11 @@ namespace Medicine
 
 			Doctor = new Doctor();
 			Doctor.GetById(document.GetValue("Doctor").AsInt32, sqlConnection);
+            
+            Article = new Article();
+            Article.GetById(document.GetValue("Article").AsBsonDocument.GetValue("$id").AsObjectId, Connection);
 
-			foreach (BsonDocument doc in document.GetValue("Tags").AsBsonArray)
+            foreach (BsonDocument doc in document.GetValue("Tags").AsBsonArray)
 			{
 				Tag tag = new Tag();
 				tag.GetById(doc.GetValue("$id").AsObjectId, Connection);
@@ -173,6 +177,38 @@ namespace Medicine
                 association.GetById(document.GetValue("_id").AsObjectId, mongoConnection);
                 result.Add(new KeyValuePair<int, Association>(counter, association));
             }
+            return result;
+        }
+
+        public override string ToString()
+        {
+            string result = "Ассоциация: { ";
+            result += $"Описание: \"{Description}\", ";
+            result += $"{Doctor.ToString()}, ";
+            result += $"{Article.ToString()}, ";
+            result += "Теги: { ";
+            foreach(Tag tag in Tags)
+            {
+                result += $"{tag}, ";
+            }
+            result = result.Remove(result.Length - 2);
+            result += " }, ";
+
+            result += "Медицинские объекты: { ";
+            foreach (IEhrObject medicineObject in MedicineObjects)
+            {
+                result += $"{medicineObject.ToString()}, ";
+            }
+            result = result.Remove(result.Length - 2);
+            result += " }, ";
+
+            result += "Изменения: { ";
+            foreach (Change change in Changes)
+            {
+                result += $"{change.ToString()}, ";
+            }
+            result = result.Remove(result.Length - 2);
+            result += " } }";
             return result;
         }
     }

@@ -79,7 +79,7 @@ namespace OpenEHR
 
 		public override string ToString()
 		{
-			return $"Лекарство: {{\n\tНазвание: {Name}\n}}";
+			return $"Лекарство: {{ Название: \"{Name}\" }}";
 		}
 	}
 }

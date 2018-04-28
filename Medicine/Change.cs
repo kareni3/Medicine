@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,13 @@ namespace Medicine
 
 		public Change()
 		{
-			ChangeTime = DateTime.Now;
-			Content = "Ассоциация создана";
+            ChangeTime = DateTime.Now;
+            Content = "Ассоциация создана";
 		}
-	}
+
+        public override string ToString()
+        {
+            return $"Изменение: {{ Время изменения: {ChangeTime}, Содержание: \"{Content}\" }}";
+        }
+    }
 }

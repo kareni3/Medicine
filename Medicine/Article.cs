@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	public class Article : MongoEntity, IMedicineObject
+	public class Article : MongoEntity
 	{
 		public string Name { get; set; }
 		public string Link { get; set; }
@@ -60,7 +60,7 @@ namespace Medicine
 			_id = document.GetValue("_id").AsObjectId;
 			Name = document.GetValue("Name").AsString;
 			Link = link;
-			Extract = document.GetValue("Extract").AsString;
+            Extract = document.GetValue("Extract").AsString;
 		}
 
 		public override void Save()
@@ -87,6 +87,11 @@ namespace Medicine
 				);
 				Collection.UpdateOne(filter, update);
 			}
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return $"Статья: {{ Название: \"{Name}\", Ссылка: \"{Link}\", Выдержка: \"{Extract}\" }}";
+        }
+    }
 }

@@ -64,6 +64,11 @@ namespace Medicine
 				var update = Builders<BsonDocument>.Update.Set("Content", Content);
 				Collection.UpdateOne(filter, update);
 			}
-		}
-	}
+        }
+
+        public override string ToString()
+        {
+            return $"Тег: {{ Содержание: \"{Content}\" }}";
+        }
+    }
 }

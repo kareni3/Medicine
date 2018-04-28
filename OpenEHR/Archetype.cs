@@ -78,7 +78,7 @@ namespace OpenEHR
 
 		public override string ToString()
 		{
-			return $"Архетип: {{\n\tНазвание: {Name}\n}}";
+			return $"Архетип: {{ Название: \"{Name}\" }}";
 		}
 	}
 }

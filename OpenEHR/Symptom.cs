@@ -81,7 +81,7 @@ namespace OpenEHR
 
 		public override string ToString()
 		{
-			return $"Симптом: {{\n\t{Diagnosis.ToString()},\n\t{Archetype.ToString()},\n\tЗначение архетипа: {ArchetypeValue}\n}}";
+			return $"Симптом: {{ {Diagnosis.ToString()}, {Archetype.ToString()}, Значение архетипа: {ArchetypeValue} }}";
 		}
 	}
 }

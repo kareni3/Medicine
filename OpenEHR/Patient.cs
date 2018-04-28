@@ -94,7 +94,7 @@ namespace OpenEHR
 
 		public override string ToString()
 		{
-			return $"Пациент: {{\n\tФамилия: {Lastname},\n\tИмя: {Firstname},\n\tОтчество: {Middlename}\n}}";
+			return $"Пациент: {{ Фамилия: \"{Lastname}\", Имя: \"{Firstname}\", Отчество: \"{Middlename}\" }}";
 		}
 	}
 }

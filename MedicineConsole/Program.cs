@@ -90,20 +90,15 @@ namespace MedicineConsole
 
 				Console.WriteLine(prescription3);
 
-				Article article1 = new Article(@"Повышенная вязкость крови – один из факторов
-										        развития кардиоваскулярных осложнений у больных
-												с истинной полицитемией",
+				Article article1 = new Article("Повышенная вязкость крови – один из факторов развития кардиоваскулярных осложнений у больных с истинной полицитемией",
 												"https://research-journal.org/medical/povyshennaya-vyazkost-krovi-odin-iz-faktorov-razvitiya-kardiovaskulyarnyx-oslozhnenij-u-bolnyx-s-istinnoj-policitemiej/",
 												"Разнообразие клинических проявлений и высокий процент развития осложнений, отличающихся по характеру и тяжести, у больных эритремией продолжает создавать трудности как в лечении, так и в повышении качества жизни больных [6, С. 32]. Изменение реологических свойств и повышение вязкости крови, по результатам наших исследований, оказывают большее влияние на сердечно-сосудистую систему с развитием целого ряда синдромов и симптомов – гипертоническая болезнь, ишемическая болезнь сердца, симптоматическая артериальная гипертензия в 53,4% случаев. Возрастной пик заболеваемости, приходящий на пациентов среднего и пожилого возраста, делает их более уязвимыми в отношении развития тромботических осложнений. В рамках нашего исследования истинной полицитемии более подвержены мужчины  от 40 до 70 лет.", 
 												mongoConnection);
-				Article article2 = new Article(@"Центральная гемодинамика, тиреоидный статус и 
-											   дисфункции эндотелия у больных артериальной 
-											   гипертонией в условиях высокогорья",
+				Article article2 = new Article("Центральная гемодинамика, тиреоидный статус и дисфункции эндотелия у больных артериальной гипертонией в условиях высокогорья",
 											   "https://research-journal.org/medical/centralnaya-gemodinamika-tireoidnyj-status-i-disfunkcii-endoteliya-u-bolnyx-arterialnoj-gipertoniej-v-usloviyax-vysokogorya/",
 											   "Установлено, что снижение продукции NO с одновременным снижением концентрации тиреоидных гормонов вызывают нарушения интракардиальной гемодинамики, изменения структурно-функционального состояния ЛЖ и утяжеляют течение артериальной гипертонии.",
 											   mongoConnection);
-				Article article3 = new Article(@"Сочетанные изменения экспрессии генов cstb и acap3
-											   при симптоматической эпилепсии и болезни паркинсона",
+				Article article3 = new Article("Сочетанные изменения экспрессии генов cstb и acap3 при симптоматической эпилепсии и болезни паркинсона",
 											   "https://research-journal.org/medical/sochetannye-izmeneniya-ekspressii-genov-cstb-i-acap3-pri-simptomaticheskoj-epilepsii-i-bolezni-parkinsona/",
 											   "Кроме того, у женщин наблюдалось снижение уровня мРНК гена CSTB при эпилепсии(примерно в 3 раза) и при болезни Паркинсона(примерно в 2.5 раза).Полученные данные указывают на возможное участие исследованных генов в патогенезе симптоматической эпилепсии и болезни Паркинсона.",
 											   mongoConnection);
@@ -158,8 +153,8 @@ namespace MedicineConsole
 					tag1,
 					tag4
 				});
-                association2.Article = article3;
-				association2.MedicineObjects.AddRange(new IEhrObject[]
+                association3.Article = article3;
+				association3.MedicineObjects.AddRange(new IEhrObject[]
 				{
 					medicament,
 					medicament3
@@ -169,16 +164,21 @@ namespace MedicineConsole
                 #endregion
 
                 Tag findTag1 = new Tag();
-                findTag1.GetByContent("Карапузов", mongoConnection);
+                Console.Write("Введите тег: ");
+                findTag1.GetByContent(Console.ReadLine(), mongoConnection); //"Карапузов"
 
                 Tag findTag2 = new Tag();
-                findTag2.GetByContent("Эритремия", mongoConnection);
+                Console.Write("Введите тег: ");
+                findTag2.GetByContent(Console.ReadLine(), mongoConnection); //"Эритремия"
 
                 Tag findTag3 = new Tag();
-                findTag3.GetByContent("Гипертония", mongoConnection);
+                Console.Write("Введите тег: ");
+                findTag3.GetByContent(Console.ReadLine(), mongoConnection); //"Гипертония"
 
                 Tag findTag4 = new Tag();
-                findTag4.GetByContent("Грипп", mongoConnection);
+                Console.Write("Введите тег: ");
+                findTag4.GetByContent(Console.ReadLine(), mongoConnection); //"Грипп"
+                Console.WriteLine();
 
                 List<KeyValuePair<int, Association>> associations = Association.GetAssociationListByTag(new Tag[]
                 {
@@ -187,6 +187,12 @@ namespace MedicineConsole
                     findTag3,
                     findTag4
                 }, sqlConnection, mongoConnection);
+                foreach(KeyValuePair<int, Association> association in associations)
+                {
+                    Console.WriteLine(association.Value);
+                    Console.WriteLine("Число совпадений: " + association.Key);
+                    Console.WriteLine();
+                }
             }
             catch (Exception ex)
 			{
