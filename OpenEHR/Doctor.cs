@@ -133,8 +133,17 @@ namespace OpenEHR
 				command.Parameters.AddWithValue("@lastname", Lastname);
 				command.Parameters.AddWithValue("@firstname", Firstname);
 				command.Parameters.AddWithValue("@middlename", Middlename);
-				command.Parameters.AddWithValue("@username", Username);
-				command.ExecuteNonQuery();
+                if (String.IsNullOrWhiteSpace(Username))
+                {
+                    command.Parameters.AddWithValue("@username", DBNull.Value);
+                    command.Parameters.AddWithValue("@password", DBNull.Value);
+                }
+                else
+                {
+                    command.Parameters.AddWithValue("@username", Username);
+                    command.Parameters.AddWithValue("@password", password);
+                }
+                command.ExecuteNonQuery();
 			}
 		}
 

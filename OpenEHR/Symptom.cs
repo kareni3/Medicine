@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OpenEHR
 {
-	public class Symptom : SqlEntity
+	public class Symptom : SqlEntity, IEhrObject
 	{
 		public Diagnosis Diagnosis { get; set; }
 		public Archetype Archetype { get; set; }

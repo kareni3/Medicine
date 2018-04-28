@@ -11,7 +11,7 @@ namespace OpenEHR
 	{
 		System.Data.SqlClient.SqlConnection Connection;
 		public string Server { get; set; }
-		public string Port { get; set; }
+		//public string Port { get; set; }
 		public string User { get; set; }
 		public string Password { private get; set; }
 		public Doctor CurrentDoctor { get; internal set; }
@@ -23,10 +23,10 @@ namespace OpenEHR
 			connected = false;
 		}
 
-		public SqlConnection(string server, string port, string user, string password) : this()
+		public SqlConnection(string server, /*string port,*/ string user, string password) : this()
 		{
 			Server = server;
-			Port = port;
+			//Port = port;
 			User = user;
 			Password = password;
 		}
@@ -35,7 +35,7 @@ namespace OpenEHR
 		{
 			try
 			{
-				Connection = new System.Data.SqlClient.SqlConnection(String.Format(ConfigurationManager.ConnectionStrings["openehr"].ConnectionString, Server, Port, User, Password));
+				Connection = new System.Data.SqlClient.SqlConnection(String.Format(ConfigurationManager.ConnectionStrings["openehr"].ConnectionString, Server, /*Port,*/ User, Password));
 				Connection.Open();
 				connected = true;
 			}

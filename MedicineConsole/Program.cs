@@ -22,18 +22,21 @@ namespace MedicineConsole
 				MongoConnection mongoConnection = new MongoConnection("ds229008.mlab.com", "29008", mongoUser, mongoPassword);
 				mongoConnection.Connect();
 
-				SqlConnection sqlConnection = new SqlConnection("tcp:medic.database.windows.net", "1433", sqlUser, sqlPassword);
+				SqlConnection sqlConnection = new SqlConnection("ELISEY", /*"1433",*/ sqlUser, sqlPassword);
 				sqlConnection.Connect();
 
 				Console.Clear();
-				
-				Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", sqlConnection);
-				doctor.Save(sqlConnection);
 
-				Patient patient = new Patient("Карапузов", "Иван", "Андреевич");
-				patient.Save(sqlConnection);
+                Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", sqlConnection);
+                doctor.Save(sqlConnection);
 
-				Problem problem = new Problem("Не могу больше держаться", new DateTime(2018, 4, 17), patient, doctor, sqlConnection);
+                doctor.SignUp("doctor", "hello", "hello");
+                doctor.SignIn("doctor", "hello", sqlConnection);
+
+                Patient patient = new Patient("Карапузов", "Иван", "Андреевич");
+                patient.Save(sqlConnection);
+
+                Problem problem = new Problem("Не могу больше держаться", new DateTime(2018, 4, 17), patient, doctor, sqlConnection);
 				problem.Save();
 				Console.WriteLine(problem);
 
@@ -106,19 +109,27 @@ namespace MedicineConsole
 				Tag tag3 = new Tag("Гипертония", mongoConnection);
 				Tag tag4 = new Tag("Карапузовдержись", mongoConnection);
 
-				Association association1 = new Association("Ассоциация с наибольшим количеством тегов", mongoConnection, sqlConnection);
+                article1.Save();
+                article2.Save();
+                article3.Save();
+
+                tag1.Save();
+                tag2.Save();
+                tag3.Save();
+                tag4.Save();
+
+                Association association1 = new Association("Ассоциация с наибольшим количеством тегов", mongoConnection, sqlConnection);
 				association1.Tags.AddRange(new Tag[]
 				{
 					tag1,
 					tag2,
 					tag3
 				});
-				association1.AddMedicineObjectsRange(new object[]
+                association1.Article = article1;
+				association1.MedicineObjects.AddRange(new IEhrObject[]
 				{
 					patient,
 					problem,
-					article1,
-					article2,
 					medicament2,
 					medicament3
 				});
@@ -130,11 +141,10 @@ namespace MedicineConsole
 					tag1,
 					tag3
 				});
-				association2.AddMedicineObjectsRange(new object[]
+                association2.Article = article2;
+				association2.MedicineObjects.AddRange(new IEhrObject[]
 				{
 					patient,
-					article2,
-					article3,
 					medicament
 				});
 				association2.Save();
@@ -145,11 +155,9 @@ namespace MedicineConsole
 					tag1,
 					tag4
 				});
-				association2.AddMedicineObjectsRange(new object[]
+                association2.Article = article3;
+				association2.MedicineObjects.AddRange(new IEhrObject[]
 				{
-					article1,
-					article2,
-					article3,
 					medicament,
 					medicament3
 				});
