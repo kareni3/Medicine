@@ -149,5 +149,31 @@ namespace Medicine
 				Changes.Add(change);
 			}
 		}
-	}
+
+        public static List<KeyValuePair<int, Association>> GetAssociationListByTag(IEnumerable<Tag> findTagList, SqlConnection sqlConnection, MongoConnection mongoConnection)
+        {
+            List<KeyValuePair<int, Association>> result = new List<KeyValuePair<int, Association>>();
+            var collection = mongoConnection.GetCollection("Association");
+            var documents = collection.Find(new BsonDocument()).ToList();
+            foreach(BsonDocument document in documents)
+            {
+                int counter = 0;
+                foreach (BsonDocument tag in document.GetValue("Tags").AsBsonArray)
+                {
+                    foreach(Tag findTag in findTagList)
+                    {
+                        if (findTag._id.CompareTo(tag.GetValue("$id").AsObjectId) == 0)
+                        {
+                            counter++;
+                            break;
+                        }
+                    }
+                }
+                Association association = new Association(sqlConnection);
+                association.GetById(document.GetValue("_id").AsObjectId, mongoConnection);
+                result.Add(new KeyValuePair<int, Association>(counter, association));
+            }
+            return result;
+        }
+    }
 }

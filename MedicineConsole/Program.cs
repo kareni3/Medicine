@@ -1,6 +1,7 @@
 ﻿using Medicine;
 using OpenEHR;
 using System;
+using System.Collections.Generic;
 
 namespace MedicineConsole
 {
@@ -167,45 +168,25 @@ namespace MedicineConsole
 
                 #endregion
 
-                #region Поучение данных из БД
+                Tag findTag1 = new Tag();
+                findTag1.GetByContent("Карапузов", mongoConnection);
 
-                Doctor doctor2 = new Doctor();
-                doctor2.GetById(doctor.Id, sqlConnection);
+                Tag findTag2 = new Tag();
+                findTag2.GetByContent("Эритремия", mongoConnection);
 
-                Patient patient2 = new Patient();
-                patient2.GetById(patient.Id, sqlConnection);
+                Tag findTag3 = new Tag();
+                findTag3.GetByContent("Гипертония", mongoConnection);
 
-                Problem problem2 = new Problem();
-                problem2.GetById(problem.Id, sqlConnection);
+                Tag findTag4 = new Tag();
+                findTag4.GetByContent("Грипп", mongoConnection);
 
-                Complaint complaint3 = new Complaint();
-                complaint3.GetById(complaint1.Id, sqlConnection);
-
-                Diagnosis diagnosis2 = new Diagnosis();
-                diagnosis2.GetById(diagnosis.Id, sqlConnection);
-
-                Medicament medicament4 = new Medicament();
-                medicament4.GetById(medicament.Id, sqlConnection);
-
-                Symptom symptom3 = new Symptom();
-                symptom3.GetById(symptom1.Id, sqlConnection);
-
-                Archetype archetype = new Archetype();
-                archetype.GetById(symptom1.Id, sqlConnection);
-
-                Prescription prescription4 = new Prescription();
-                prescription4.GetById(prescription.Id, sqlConnection);
-
-                Article article4 = new Article();
-                article4.GetById(article1._id, mongoConnection);
-
-                Tag tag5 = new Tag();
-                tag5.GetById(tag1._id, mongoConnection);
-
-                Association association4 = new Association(sqlConnection);
-                association4.GetById(association1._id, mongoConnection);
-
-                #endregion
+                List<KeyValuePair<int, Association>> associations = Association.GetAssociationListByTag(new Tag[]
+                {
+                    findTag1,
+                    findTag2,
+                    findTag3,
+                    findTag4
+                }, sqlConnection, mongoConnection);
             }
             catch (Exception ex)
 			{
