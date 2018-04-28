@@ -8,27 +8,26 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class Tag
+	public class Tag : MongoEntity
 	{
-		public ObjectId _id { get; private set; }
 		public string Content { get; set; }
 
-		public MongoConnection Connection;
-		private IMongoCollection<BsonDocument> collection;
-
-		public Tag() { }
-
-		public Tag(string content, MongoConnection connection)
+		public Tag()
 		{
+			collectionName = "Tag";
+		}
+
+		public Tag(string content, MongoConnection connection) : this()
+		{
+			Connection = connection;
 			Content = content;
 		}
 
-		public void GetById(ObjectId id, MongoConnection connection)
+		public override void GetById(ObjectId id)
 		{
-			Connection = connection;
-			collection = Connection.GetCollection(Collection.Tag);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("_id", id);
-			var document = collection.Find(filter).First();
+			var document = Collection.Find(filter).First();
 			_id = id;
 			Content = document.GetValue("Content").AsString;
 		}
@@ -36,36 +35,40 @@ namespace Medicine
 		public void GetByContent(string content, MongoConnection connection)
 		{
 			Connection = connection;
-			collection = Connection.GetCollection(Collection.Tag);
+			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Content", content);
-			var document = collection.Find(filter).First();
-			_id = document.GetValue("_id").AsObjectId;
-			Content = content;
+            try
+            {
+                var document = Collection.Find(filter).First();
+                _id = document.GetValue("_id").AsObjectId;
+                Content = content;
+            }
+            catch { }
 		}
 
-		public void Save(MongoConnection connection)
+		public override void Save()
 		{
-			collection = connection.GetCollection(Collection.Tag);
+			Collection = Connection.GetCollection(collectionName);
 			if (_id.CompareTo(new ObjectId()) == 0)
 			{
 				var document = new BsonDocument()
 				{
 					{ "Content", Content }
 				};
-				collection.InsertOne(document);
+				Collection.InsertOne(document);
 				_id = document.GetValue("_id").AsObjectId;
 			}
 			else
 			{
 				var filter = Builders<BsonDocument>.Filter.Eq("_id", _id);
 				var update = Builders<BsonDocument>.Update.Set("Content", Content);
-				collection.UpdateOne(filter, update);
+				Collection.UpdateOne(filter, update);
 			}
-		}
+        }
 
-		public void Save()
-		{
-			Save(Connection);
-		}
-	}
+        public override string ToString()
+        {
+            return $"Тег: {{ Содержание: \"{Content}\" }}";
+        }
+    }
 }

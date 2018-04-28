@@ -9,16 +9,23 @@ using System.Threading.Tasks;
 
 namespace Medicine
 {
-	class MongoConnection
+	public class MongoConnection
 	{
 		MongoClient mongoClient;
 		IMongoDatabase database;
 		public string Server { get; set; }
 		public string Port { get; set; }
 		public string User { get; set; }
-		public string Password { get; set; }
+		public string Password { private get; set; }
 
-		public MongoConnection(string server, string port, string user, string password)
+		private bool connected;
+
+		public MongoConnection()
+		{
+			connected = false;
+		}
+
+		public MongoConnection(string server, string port, string user, string password) : this()
 		{
 			Server = server;
 			Port = port;
@@ -28,19 +35,24 @@ namespace Medicine
 
 		public void Connect()
 		{
-			mongoClient = new MongoClient(String.Format(ConfigurationManager.ConnectionStrings["medicine"].ConnectionString, User, Password, Server, Port));
-			database = mongoClient.GetDatabase("medicine");
+			try
+			{
+				mongoClient = new MongoClient(String.Format(ConfigurationManager.ConnectionStrings["medicine"].ConnectionString, User, Password, Server, Port));
+				database = mongoClient.GetDatabase("medicine");
+				connected = true;
+			}
+			catch
+			{
+				connected = false;
+				throw;
+			}
 		}
 
-		public IMongoCollection<BsonDocument> GetCollection(Collection collection)
+		internal IMongoCollection<BsonDocument> GetCollection(string collectionName)
 		{
-			return database.GetCollection<BsonDocument>(collection.ToString());
+			if (!connected)
+				throw new Exception("Не передан экземпляр MongoConnection");
+			return database.GetCollection<BsonDocument>(collectionName);
 		}
-	}
-
-	public enum Collection
-	{
-		Tag,
-		Doctor
 	}
 }

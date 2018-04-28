@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Medicine
+namespace OpenEHR
 {
-	abstract class MedicineObject
+	public interface IEhrObject
 	{
 	}
 }
