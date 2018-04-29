@@ -37,13 +37,9 @@ namespace Medicine
 			Connection = connection;
 			Collection = Connection.GetCollection(collectionName);
 			var filter = Builders<BsonDocument>.Filter.Eq("Content", content);
-            try
-            {
-                var document = Collection.Find(filter).First();
-                _id = document.GetValue("_id").AsObjectId;
-                Content = content;
-            }
-            catch { }
+            var document = Collection.Find(filter).First();
+            _id = document.GetValue("_id").AsObjectId;
+            Content = content;
 		}
 
 		public override void Save()

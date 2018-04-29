@@ -2,6 +2,7 @@
 using OpenEHR;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MedicineConsole
 {
@@ -29,7 +30,6 @@ namespace MedicineConsole
 				Console.Clear();
 
                 #region Заполнение БД
-
                 Doctor doctor = new Doctor("Иванова", "Людмила", "Ивановна", sqlConnection);
                 doctor.Save(sqlConnection);
 
@@ -160,26 +160,58 @@ namespace MedicineConsole
 					medicament3
 				});
 				association3.Save();
-
                 #endregion
 
+                #region Поиск по тегам
                 Tag findTag1 = new Tag();
-                Console.Write("Введите тег: ");
-                findTag1.GetByContent(Console.ReadLine(), mongoConnection); //"Карапузов"
-
                 Tag findTag2 = new Tag();
-                Console.Write("Введите тег: ");
-                findTag2.GetByContent(Console.ReadLine(), mongoConnection); //"Эритремия"
-
                 Tag findTag3 = new Tag();
-                Console.Write("Введите тег: ");
-                findTag3.GetByContent(Console.ReadLine(), mongoConnection); //"Гипертония"
-
                 Tag findTag4 = new Tag();
-                Console.Write("Введите тег: ");
-                findTag4.GetByContent(Console.ReadLine(), mongoConnection); //"Грипп"
+                Tag findTag5 = new Tag();
+
+                try
+                {
+                    Console.Write("Введите тег: ");
+                    findTag1.GetByContent(Console.ReadLine(), mongoConnection); //"Карапузов"
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                try
+                {
+                    Console.Write("Введите тег: ");
+                    findTag2.GetByContent(Console.ReadLine(), mongoConnection); //"Эритремия"
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                try
+                {
+                    Console.Write("Введите тег: ");
+                    findTag3.GetByContent(Console.ReadLine(), mongoConnection); //"Гипертония"
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+
+                try
+                {
+                    Console.Write("Введите тег: ");
+                    findTag4.GetByContent(Console.ReadLine(), mongoConnection); //"Грипп"
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
                 Console.WriteLine();
 
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
                 List<KeyValuePair<int, Association>> associations = Association.GetAssociationListByTag(new Tag[]
                 {
                     findTag1,
@@ -187,12 +219,16 @@ namespace MedicineConsole
                     findTag3,
                     findTag4
                 }, sqlConnection, mongoConnection);
+                stopwatch.Stop();
+
                 foreach(KeyValuePair<int, Association> association in associations)
                 {
                     Console.WriteLine(association.Value);
                     Console.WriteLine("Число совпадений: " + association.Key);
                     Console.WriteLine();
                 }
+                Console.WriteLine("Затрачено времени: " + stopwatch.Elapsed);
+                #endregion
             }
             catch (Exception ex)
 			{
