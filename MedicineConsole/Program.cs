@@ -102,19 +102,33 @@ namespace MedicineConsole
 											   "https://research-journal.org/medical/sochetannye-izmeneniya-ekspressii-genov-cstb-i-acap3-pri-simptomaticheskoj-epilepsii-i-bolezni-parkinsona/",
 											   "Кроме того, у женщин наблюдалось снижение уровня мРНК гена CSTB при эпилепсии(примерно в 3 раза) и при болезни Паркинсона(примерно в 2.5 раза).Полученные данные указывают на возможное участие исследованных генов в патогенезе симптоматической эпилепсии и болезни Паркинсона.",
 											   mongoConnection);
+				Article article4 = new Article("Синтезируемый эндотелием вазодилататор оксид азота (NO) оказывает существенное влияние на многие фундаментальные процессы в организме человека: стабилизацию венозного и артериального давления, общего периферического сосудистого сопротивления (ОПСС), объема и вязкости циркулирующей крови и распределение крови в сосудах.",
+											   "https://research-journal.org/medical/centralnaya-gemodinamika-tireoidnyj-status-i-disfunkcii-endoteliya-u-bolnyx-arterialnoj-gipertoniej-v-usloviyax-vysokogorya/",
+											   "Кроме того, у женщин наблюдалось снижение уровня мРНК гена CSTB при эпилепсии(примерно в 3 раза) и при болезни Паркинсона(примерно в 2.5 раза).Полученные данные указывают на возможное участие исследованных генов в патогенезе симптоматической эпилепсии и болезни Паркинсона.",
+											   mongoConnection);
+				Article article5 = new Article("Полученные данные указывают на возможное участие исследованных генов в патогенезе симптоматической эпилепсии и болезни Паркинсона.",
+											   "https://research-journal.org/medical/sochetannye-izmeneniya-ekspressii-genov-cstb-i-acap3-pri-simptomaticheskoj-epilepsii-i-bolezni-parkinsona/",
+											   "Кроме того, у женщин наблюдалось снижение уровня мРНК гена CSTB при эпилепсии(примерно в 3 раза) и при болезни Паркинсона(примерно в 2.5 раза).Полученные данные указывают на возможное участие исследованных генов в патогенезе симптоматической эпилепсии и болезни Паркинсона.",
+											   mongoConnection);
 				Tag tag1 = new Tag("Карапузов", mongoConnection);
 				Tag tag2 = new Tag("Эритремия", mongoConnection);
 				Tag tag3 = new Tag("Гипертония", mongoConnection);
 				Tag tag4 = new Tag("Карапузовдержись", mongoConnection);
+				Tag tag5 = new Tag("Гены", mongoConnection);
+				Tag tag6 = new Tag("Оксид азота", mongoConnection);
 
                 article1.Save();
                 article2.Save();
                 article3.Save();
+                article4.Save();
+                article5.Save();
 
                 tag1.Save();
                 tag2.Save();
                 tag3.Save();
                 tag4.Save();
+                tag5.Save();
+                tag6.Save();
 
                 Association association1 = new Association("Ассоциация с наибольшим количеством тегов", mongoConnection, sqlConnection);
 				association1.Tags.AddRange(new Tag[]
